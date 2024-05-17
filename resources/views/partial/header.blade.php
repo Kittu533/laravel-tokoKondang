@@ -38,8 +38,8 @@
               <button  class="rounded-md bg-yellow-400 px-5 py-2.5 text-sm font-medium text-black shadow">Logout</button>
             </form>
             <div class="hidden sm:flex">
-              <a class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-black-600"
-                href="/TokoKondangWeb/Keranjang/checkout.html">
+              <a  class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-black-600"
+                href="{{ route('chart') }}">
                 Keranjang
               </a>
             </div>
