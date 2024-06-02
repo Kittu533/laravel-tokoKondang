@@ -13,18 +13,10 @@
         <nav aria-label="Global" class="hidden md:block">
           <ul class="flex items-center gap-6 text-sm">
             <li>
-              <a class="text-gray-500 transition hover:text-gray-500/75" href="/TokoKondangWeb/home-page/index.html">
-                Home </a>
+              <a href="{{ route('home') }}">Home</a>
             </li>
-
-            <li>
-              <a class="text-gray-500 transition hover:text-gray-500/75" href="/TokoKondangWeb/home-page/index.html">
-                About </a>
-            </li>
-
-            <li>
-              <a class="text-gray-500 transition hover:text-gray-500/75"
-                href="/TokoKondangWeb/halaman-belanja/Index.html"> Shop </a>
+           <li>
+              <a href="{{ route('product') }}">Shop</a>
             </li>
           </ul>
         </nav>
@@ -35,14 +27,15 @@
             <form action="{{ route('logout') }}" method="POST" class="d-flex" role="search">
               @csrf
               @method('DELETE')
-              <button  class="rounded-md bg-yellow-400 px-5 py-2.5 text-sm font-medium text-black shadow">Logout</button>
+              <button class="rounded-md bg-yellow-400 px-5 py-2.5 text-sm font-medium text-black shadow">Logout</button>
             </form>
             <div class="hidden sm:flex">
-              <a  class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-black-600"
-                href="{{ route('chart') }}">
+              <a class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-black-600"
+                href="{{ route('cart.index') }}">
                 Keranjang
               </a>
             </div>
+            
           </div>
 
           <div class="block md:hidden">
