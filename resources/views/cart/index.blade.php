@@ -74,7 +74,7 @@
 
         @if(!$cartItems->isEmpty())
         <div class="mt-4 flex justify-between items-center">
-            <a href="{{ route('product.index') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Lanjut Belanja</a>
+            <a href="{{ route('product') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Lanjut Belanja</a>
             <a href="{{ route('checkout.index') }}" class="bg-green-500 text-white px-4 py-2 rounded">Lanjut Pembayaran</a>
         </div>
         @endif

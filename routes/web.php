@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
 
@@ -43,8 +44,7 @@ Route::get('/productDetail', function () {
 Route::get('/product', [ProductController::class, 'showProducts'])->name('product');
 Route::get('/product/{id_product}', [ProductController::class, 'show'])->name('productDetail');
 Route::get('/home', [ProductController::class, 'showProductCollection'])->name('home');
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/products', [ProductController::class, 'index'])->name('product.index');
+Route::get('/products', [ProductController::class, 'sliderProduct'])->name('products.index');
 
 // Route::get('/productDetail', 'ProductController@productDetail')->name('productDetail');
 
@@ -64,7 +64,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 });
-Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-    
+
+
 // END CHECKOUT 
 
+// Payment
+Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
+
+
+// End Payment

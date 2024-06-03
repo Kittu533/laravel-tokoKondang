@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
-        data-client-key="{{ config('midtrans.client_key') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body class="bg-gray-100">
@@ -19,7 +19,7 @@
                 <div class="bg-white p-6 rounded shadow">
                     <h3 class="text-xl font-semibold mb-4">Billing Information</h3>
                     @if(session('success'))
-                        <div class="bg-green-100 text-green-700 p-4 mb-4">
+                        <div class="bg-green-100 text-green-700 p-4 mb-4 rounded">
                             {{ session('success') }}
                         </div>
                     @endif
@@ -27,8 +27,7 @@
                         @csrf
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label for="firstName" class="block text-sm font-medium text-gray-700">First
-                                    Name</label>
+                                <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
                                 <input type="text" id="firstName" name="firstName"
                                     class="mt-1 block w-full rounded border-gray-300 shadow-sm" required>
                             </div>
@@ -44,40 +43,39 @@
                                 class="mt-1 block w-full rounded border-gray-300 shadow-sm" required>
                         </div>
                         <div class="mb-4">
-                            <label for="phone" class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
-                            <input type="phone" id="phone" name="phone"
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                            <input type="text" id="phone" name="phone"
                                 class="mt-1 block w-full rounded border-gray-300 shadow-sm" required>
                         </div>
                         <div class="mb-4">
-                            <label for="province" class="block text-sm font-medium text-gray-700">Provinsi:</label>
+                            <label for="province" class="block text-sm font-medium text-gray-700">Province</label>
                             <select id="province" name="province" class="form-select mt-1 block w-full">
-                                <option value="">Pilih Provinsi</option>
+                                <option value="">Select Province</option>
                                 <!-- Options will be populated by JavaScript -->
                             </select>
                         </div>
                         <div class="mb-4">
-                            <label for="regency" class="block text-sm font-medium text-gray-700">Kabupaten:</label>
+                            <label for="regency" class="block text-sm font-medium text-gray-700">Regency</label>
                             <select id="regency" name="regency" class="form-select mt-1 block w-full">
-                                <option value="">Pilih Kabupaten</option>
+                                <option value="">Select Regency</option>
                                 <!-- Options will be populated by JavaScript -->
                             </select>
                         </div>
                         <div class="mb-4">
-                            <label for="district" class="block text-sm font-medium text-gray-700">Kecamatan:</label>
+                            <label for="district" class="block text-sm font-medium text-gray-700">District</label>
                             <select id="district" name="district" class="form-select mt-1 block w-full">
-                                <option value="">Pilih Kecamatan</option>
+                                <option value="">Select District</option>
                                 <!-- Options will be populated by JavaScript -->
                             </select>
                         </div>
                         <div class="mb-4">
-                            <label for="village" class="block text-sm font-medium text-gray-700">Kelurahan:</label>
+                            <label for="village" class="block text-sm font-medium text-gray-700">Village</label>
                             <select id="village" name="village" class="form-select mt-1 block w-full">
-                                <option value="">Pilih Kelurahan</option>
+                                <option value="">Select Village</option>
                                 <!-- Options will be populated by JavaScript -->
                             </select>
                         </div>
-                        <button type="button" id="pay-button"
-                            class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Place Order</button>
+                        <button type="button" id="pay-button" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 w-full">Place Order</button>
                     </form>
                 </div>
             </div>
@@ -114,23 +112,28 @@
                         <p class="font-semibold">Total</p>
                         <p class="font-bold">Rp{{ number_format($total, 0, ',', '.') }}</p>
                     </div>
-                    <a href="{{ route('cart.index') }}"
-                        class="bg-blue-500 text-white px-4 py-2 rounded mt-4 inline-block">Back to Cart</a>
+                    <a href="{{ route('cart.index') }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 inline-block w-full text-center">Back to Cart</a>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded shadow-lg w-1/2 max-w-md mx-auto">
+            <h3 class="text-lg font-semibold mb-4">Transaction Successful</h3>
+            <p>Please proceed with the payment.</p>
+            <button id="closeModal" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Close</button>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function () {
-            console.log('Document is ready');
-
             // Fetch and populate provinces
             $.ajax({
                 url: '/api/api/provinces',
                 method: 'GET',
                 success: function (data) {
-                    console.log('Provinces data:', data);
                     data.forEach(function (province) {
                         $('#province').append(`<option value="${province.id}">${province.name}</option>`);
                     });
@@ -142,17 +145,15 @@
 
             // Fetch and populate regencies based on selected province
             $('#province').change(function () {
-                console.log('Province changed');
                 var provinceId = $(this).val();
-                $('#regency').empty().append('<option value="">Pilih Kabupaten</option>');
-                $('#district').empty().append('<option value="">Pilih Kecamatan</option>');
-                $('#village').empty().append('<option value="">Pilih Kelurahan</option>');
+                $('#regency').empty().append('<option value="">Select Regency</option>');
+                $('#district').empty().append('<option value="">Select District</option>');
+                $('#village').empty().append('<option value="">Select Village</option>');
 
                 $.ajax({
                     url: `/api/api/regencies/${provinceId}`,
                     method: 'GET',
                     success: function (data) {
-                        console.log('Regencies data:', data);
                         data.forEach(function (regency) {
                             $('#regency').append(`<option value="${regency.id}">${regency.name}</option>`);
                         });
@@ -165,16 +166,14 @@
 
             // Fetch and populate districts based on selected regency
             $('#regency').change(function () {
-                console.log('Regency changed');
                 var regencyId = $(this).val();
-                $('#district').empty().append('<option value="">Pilih Kecamatan</option>');
-                $('#village').empty().append('<option value="">Pilih Kelurahan</option>');
+                $('#district').empty().append('<option value="">Select District</option>');
+                $('#village').empty().append('<option value="">Select Village</option>');
 
                 $.ajax({
                     url: `/api/api/districts/${regencyId}`,
                     method: 'GET',
                     success: function (data) {
-                        console.log('Districts data:', data);
                         data.forEach(function (district) {
                             $('#district').append(`<option value="${district.id}">${district.name}</option>`);
                         });
@@ -187,15 +186,13 @@
 
             // Fetch and populate villages based on selected district
             $('#district').change(function () {
-                console.log('District changed');
                 var districtId = $(this).val();
-                $('#village').empty().append('<option value="">Pilih Kelurahan</option>');
+                $('#village').empty().append('<option value="">Select Village</option>');
 
                 $.ajax({
                     url: `/api/api/villages/${districtId}`,
                     method: 'GET',
                     success: function (data) {
-                        console.log('Villages data:', data);
                         data.forEach(function (village) {
                             $('#village').append(`<option value="${village.id}">${village.name}</option>`);
                         });
@@ -205,39 +202,34 @@
                     }
                 });
             });
-        });
 
-        // Midtrans Snap Payment
-        $('#pay-button').click(function (event) {
-            event.preventDefault();
-            var form = $('#payment-form');
-            $.ajax({
-                url: form.attr('action'),
-                method: form.attr('method'),
-                data: form.serialize(),
-                success: function (response) {
-                    snap.pay(response.snapToken, {
-                        onSuccess: function (result) {
-                            console.log(result);
-                            window.location.href = '/checkout/success';
-                        },
-                        onPending: function (result) {
-                            console.log(result);
-                            window.location.href = '/checkout/pending';
-                        },
-                        onError: function (result) {
-                            console.error(result);
-                            window.location.href = '/checkout/error';
-                        }
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error processing payment:', error);
-                }
+           // Handle form submission
+           $('#pay-button').click(function (event) {
+                event.preventDefault();
+                var form = $('#payment-form');
+                $.ajax({
+                    url: form.attr('action'),
+                    method: form.attr('method'),
+                    data: form.serialize(),
+                    success: function (response) {
+                        $('#successModal').removeClass('hidden');
+                        setTimeout(function () {
+                            window.location.href = '{{ route('payment.index') }}';
+                        }, 3000); // Redirect after 3 seconds
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error processing order:', xhr.responseText);
+                    }
+                });
+            });
+
+
+            // Close modal
+            $('#closeModal').click(function () {
+                $('#successModal').addClass('hidden');
             });
         });
     </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

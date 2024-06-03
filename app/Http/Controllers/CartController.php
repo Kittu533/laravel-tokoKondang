@@ -24,6 +24,11 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
+
         $userId = auth()->id();
         $productId = $request->input('product_id');
         $quantity = $request->input('quantity');
@@ -44,41 +49,17 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function checkout(Request $request)
     {
-        //
-    }
+        $userId = auth()->id();
+        $cartItems = Cart::where('user_id', $userId)->with('product')->get();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        // Lakukan proses checkout (misalnya menyimpan detail order ke database)
+        // Anda bisa menyesuaikan ini sesuai dengan kebutuhan aplikasi Anda
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Cart $cart)
-    {
-        //
+        // Redirect ke halaman pembayaran
+        return redirect()->route('payment.process')->with('cartItems', $cartItems);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         $cartItem = Cart::findOrFail($id);

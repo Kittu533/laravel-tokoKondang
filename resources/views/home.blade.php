@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.bunny.net">
   <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
- 
+
 
 </head>
 
@@ -24,12 +24,18 @@
       <div class="sm:flex sm:items-center sm:justify-between">
         <div class="text-center sm:text-left">
           <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">Selamat datang di toko kondang,
-            {{ Auth::user()->name }}</h1>
+            {{ Auth::user()->name }}
+          </h1>
           <p class="mt-1.5 text-sm text-gray-500">Betabur diskon besar besaran setiap hari 🎉</p>
         </div>
       </div>
     </div>
   </header>
+ <body class="antialiased">
+  <!-- Carousel -->
+  
+  
+  @include('partial.sliderHome')
 
   <!-- About us -->
   <section data-aos="fade-right" data-aos-duration="2000">
@@ -130,7 +136,7 @@
   <!-- End About Us -->
 
   @include('partial.testimoni ')
-
+ 
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init();

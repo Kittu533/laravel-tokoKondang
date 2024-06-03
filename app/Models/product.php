@@ -5,14 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class product extends Model
+class Product extends Model
 {
-    use HasFactory;
-
-    protected $table = 'product'; // Pastikan tabel yang dirujuk adalah 'product'
-
-    protected $primaryKey = 'id_product'; // Pastikan primary key yang dirujuk adalah 'id_product'
-
+    protected $table = 'product'; // Menyesuaikan nama tabel
+    protected $primaryKey = 'id_product'; // Menyesuaikan nama primary key
     protected $fillable = [
         'name_product',
         'price_product',
@@ -20,6 +16,5 @@ class product extends Model
         'stock_product',
         'image_product',
     ];
-
 }
 

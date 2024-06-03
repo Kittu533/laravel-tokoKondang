@@ -138,8 +138,11 @@
     <!-- End Product Details Section -->
 
     <!-- Buatkan sayas menngenai diskripsi produvt -->
-    <!-- End Product Description -->
-
+    
+  
+    <div>
+          @include('partial.sliderProduct')
+    </div>
     @include('partial.footer')
 
     @if(session('success'))
