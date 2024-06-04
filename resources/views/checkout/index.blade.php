@@ -27,7 +27,8 @@
                         @csrf
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                                <label for="firstName" class="block text-sm font-medium text-gray-700">First
+                                    Name</label>
                                 <input type="text" id="firstName" name="firstName"
                                     class="mt-1 block w-full rounded border-gray-300 shadow-sm" required>
                             </div>
@@ -75,7 +76,8 @@
                                 <!-- Options will be populated by JavaScript -->
                             </select>
                         </div>
-                        <button type="button" id="pay-button" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 w-full">Place Order</button>
+                        <button type="button" id="pay-button"
+                            class="bg-blue-500 text-white px-4 py-2 rounded mt-4 w-full">Place Order</button>
                     </form>
                 </div>
             </div>
@@ -112,7 +114,9 @@
                         <p class="font-semibold">Total</p>
                         <p class="font-bold">Rp{{ number_format($total, 0, ',', '.') }}</p>
                     </div>
-                    <a href="{{ route('cart.index') }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 inline-block w-full text-center">Back to Cart</a>
+                    <a href="{{ route('cart.index') }}"
+                        class="bg-blue-500 text-white px-4 py-2 rounded mt-4 inline-block w-full text-center">Back to
+                        Cart</a>
                 </div>
             </div>
         </div>
@@ -203,8 +207,8 @@
                 });
             });
 
-           // Handle form submission
-           $('#pay-button').click(function (event) {
+            // Handle form submission
+            $('#pay-button').click(function (event) {
                 event.preventDefault();
                 var form = $('#payment-form');
                 $.ajax({
@@ -214,7 +218,7 @@
                     success: function (response) {
                         $('#successModal').removeClass('hidden');
                         setTimeout(function () {
-                            window.location.href = '{{ route('payment.index') }}';
+                            window.location.href = '{{ route('payment.index') }}?order_id=' + response.order_id;
                         }, 3000); // Redirect after 3 seconds
                     },
                     error: function (xhr, status, error) {
@@ -222,7 +226,6 @@
                     }
                 });
             });
-
 
             // Close modal
             $('#closeModal').click(function () {

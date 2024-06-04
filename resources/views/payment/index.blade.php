@@ -23,14 +23,36 @@
         <div class="bg-white p-6 rounded-lg shadow-lg">
             <h3 class="text-xl font-semibold mb-4">Invoice Order</h3>
             <div class="mb-4">
-                <p class="font-semibold">Order ID: <span id="order-id">#12345</span></p>
-                <p class="font-semibold">Total Amount: <span id="order-amount">Rp 239,000</span></p>
+                <p class="font-semibold">Order ID: <span id="order-id">#{{ $orderId }}</span></p>
+                <p class="font-semibold">Total Amount: <span id="order-amount">Rp
+                        {{ number_format($order->total, 0, ',', '.') }}</span></p>
             </div>
             <div class="mb-4">
                 <p class="font-semibold">Please complete your payment within:</p>
                 <p class="countdown" id="countdown-timer">05:00</p>
             </div>
-            <button id="pay-button" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 w-full">Pay Now</button>
+            <form id="payment-form" action="{{ route('payment.process') }}" method="POST">
+                @csrf
+                <input type="hidden" name="order_id" value="{{ $orderId }}">
+                <button type="submit" id="pay-button" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 w-full">Pay
+                    Now</button>
+            </form>
+        </div>
+        <div id="successModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+            <div class="bg-white p-6 rounded shadow-lg">
+                <h3 class="text-lg font-semibold mb-4">Transaction Successful</h3>
+                <p>Thank you for your payment!</p>
+                <button id="closeModal" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Close</button>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div id="errorModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+            <div class="bg-white p-6 rounded shadow-lg">
+                <h3 class="text-lg font-semibold mb-4">Transaction Failed</h3>
+                <p>Sorry, your payment failed. Please try again.</p>
+                <button id="closeErrorModal" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Close</button>
+            </div>
         </div>
     </div>
 
@@ -62,11 +84,24 @@
             startCountdown(fiveMinutes, display);
         });
 
-        // Handle pay button click
-        $('#pay-button').click(function () {
-            alert('Payment process initiated. Implement payment gateway integration here.');
-            // Implement your payment gateway integration here
+        $(document).ready(function () {
+            @if(session('success'))
+                $('#successModal').removeClass('hidden');
+            @endif
+
+            @if(session('error'))
+                $('#errorModal').removeClass('hidden');
+            @endif
+
+            $('#closeModal').click(function () {
+                $('#successModal').addClass('hidden');
+            });
+
+            $('#closeErrorModal').click(function () {
+                $('#errorModal').addClass('hidden');
+            });
         });
+    </script>
     </script>
 </body>
 

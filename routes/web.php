@@ -70,6 +70,10 @@ Route::middleware(['auth'])->group(function () {
 
 // Payment
 Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
+Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
+Route::post('/payment/notification', [PaymentController::class, 'notificationHandler'])->name('payment.notification');
+Route::get('/payment/finish', [PaymentController::class, 'finish'])->name('payment.finish');
+
 
 
 // End Payment

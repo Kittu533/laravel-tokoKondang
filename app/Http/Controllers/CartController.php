@@ -55,7 +55,7 @@ class CartController extends Controller
         $cartItems = Cart::where('user_id', $userId)->with('product')->get();
 
         // Lakukan proses checkout (misalnya menyimpan detail order ke database)
-        // Anda bisa menyesuaikan ini sesuai dengan kebutuhan aplikasi Anda
+        // Anda bisa menye  suaikan ini sesuai dengan kebutuhan aplikasi Anda
 
         // Redirect ke halaman pembayaran
         return redirect()->route('payment.process')->with('cartItems', $cartItems);
