@@ -7,8 +7,9 @@
     <title>Payment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ $clientKey }}"></script>
     <style>
         .countdown {
             font-size: 1.5rem;
@@ -24,8 +25,7 @@
             <h3 class="text-xl font-semibold mb-4">Invoice Order</h3>
             <div class="mb-4">
                 <p class="font-semibold">Order ID: <span id="order-id">#{{ $orderId }}</span></p>
-                <p class="font-semibold">Total Amount: <span id="order-amount">Rp
-                        {{ number_format($order->total, 0, ',', '.') }}</span></p>
+                <p class="font-semibold">Total Amount: <span id="order-amount">Rp {{ number_format($order->total, 0, ',', '.') }}</span></p>
             </div>
             <div class="mb-4">
                 <p class="font-semibold">Please complete your payment within:</p>
@@ -37,22 +37,6 @@
                 <button type="submit" id="pay-button" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 w-full">Pay
                     Now</button>
             </form>
-        </div>
-        <div id="successModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h3 class="text-lg font-semibold mb-4">Transaction Successful</h3>
-                <p>Thank you for your payment!</p>
-                <button id="closeModal" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Close</button>
-            </div>
-        </div>
-
-        <!-- Error Modal -->
-        <div id="errorModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h3 class="text-lg font-semibold mb-4">Transaction Failed</h3>
-                <p>Sorry, your payment failed. Please try again.</p>
-                <button id="closeErrorModal" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Close</button>
-            </div>
         </div>
     </div>
 
@@ -84,24 +68,27 @@
             startCountdown(fiveMinutes, display);
         });
 
-        $(document).ready(function () {
-            @if(session('success'))
-                $('#successModal').removeClass('hidden');
-            @endif
-
-            @if(session('error'))
-                $('#errorModal').removeClass('hidden');
-            @endif
-
-            $('#closeModal').click(function () {
-                $('#successModal').addClass('hidden');
-            });
-
-            $('#closeErrorModal').click(function () {
-                $('#errorModal').addClass('hidden');
+        // Handle form submission
+        $('#payment-form').on('submit', function (e) {
+            e.preventDefault();
+            var snapToken = '{{ $snapToken }}';
+            var orderId = $('input[name="order_id"]').val();
+            snap.pay(snapToken, {
+                onSuccess: function (result) {
+                    window.location.href = '{{ route('payment.finish') }}?order_id=' + orderId + '&status_code=' + result.status_code + '&transaction_status=' + result.transaction_status;
+                },
+                onPending: function (result) {
+                    window.location.href = '{{ route('payment.finish') }}?order_id=' + orderId + '&status_code=' + result.status_code + '&transaction_status=' + result.transaction_status;
+                },
+                onError: function (result) {
+                    alert('Payment failed: ' + result.status_message);
+                    window.location.href = '{{ route('payment.finish') }}?order_id=' + orderId + '&status_code=' + result.status_code + '&transaction_status=' + result.transaction_status;
+                },
+                onClose: function () {
+                    alert('You closed the popup without finishing the payment');
+                }
             });
         });
-    </script>
     </script>
 </body>
 

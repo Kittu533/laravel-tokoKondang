@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
@@ -74,6 +75,14 @@ Route::post('/payment/process', [PaymentController::class, 'processPayment'])->n
 Route::post('/payment/notification', [PaymentController::class, 'notificationHandler'])->name('payment.notification');
 Route::get('/payment/finish', [PaymentController::class, 'finish'])->name('payment.finish');
 
+
+Route::get('/invoice/{order}', [OrderController::class, 'invoice'])->name('order.invoice');
+
+// Tambahkan rute untuk handle callback dari Midtrans
+Route::post('/midtrans/notification', [PaymentController::class, 'notificationHandler'])->name('payment.notification');
+
+// Tambahkan rute untuk handle finish redirect dari Midtrans
+Route::get('/midtrans/finish', [PaymentController::class, 'finish'])->name('payment.finish');
 
 
 // End Payment

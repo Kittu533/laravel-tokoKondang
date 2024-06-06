@@ -66,7 +66,7 @@ class CheckoutController extends Controller
         foreach ($cartItems as $cartItem) {
             $orderItem = new OrderItem();
             $orderItem->order_id = $order->id;
-            $orderItem->id_product = $cartItem->product_id; // Adjust column to match your database
+            $orderItem->id_product = $cartItem->id_product; // Ensure that this is populated
             $orderItem->quantity = $cartItem->quantity;
             $orderItem->price = $cartItem->product->price_product;
             $orderItem->save();

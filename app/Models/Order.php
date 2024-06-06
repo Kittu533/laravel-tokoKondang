@@ -19,4 +19,10 @@ class Order extends Model
         'village',
         'total'
     ];
+    use HasFactory;
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }
